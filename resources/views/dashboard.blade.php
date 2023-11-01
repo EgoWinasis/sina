@@ -1,9 +1,6 @@
 @extends('adminlte::page')
 
 @section('title','Dashboard')
-@section('content_header')
-    <h1>Dashboard</h1>
-@stop
 
 @section('content')
         <div id="layoutSidenav">
@@ -84,15 +81,10 @@
                         </div>
                     </div>
                 </main>
-                <footer class="py-4 bg-light mt-auto">
-                    <div class="container-fluid">
-                        <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; IT BPR Nusamba Adiwerna {!! date('Y') !!}</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
+                <footer class="py-4 bg-light mt-auto fixed-bottom ">
+                    <div class="container-fluid ">
+                        <div class="d-flex align-items-center justify-content-center small">
+                            <div class="text-muted ">Copyright &copy; IT BPR Nusamba Adiwerna {!! date('Y') !!}</div>
                         </div>
                     </div>
                 </footer>
@@ -103,6 +95,7 @@
 
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
+    
 @endsection
 @section('js')
     

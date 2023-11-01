@@ -18,3 +18,8 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// //device
+// Route::get('/device', [App\Http\Controllers\DeviceController::class, 'index'])->name('device');
+// Route::get('/device', [App\Http\Controllers\DeviceController::class, 'index'])->name('create');
+// route master data devices
+Route::resource('device', \App\Http\Controllers\DeviceController::class)->middleware('auth');
