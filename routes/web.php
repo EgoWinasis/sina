@@ -23,3 +23,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // Route::get('/device', [App\Http\Controllers\DeviceController::class, 'index'])->name('create');
 // route master data devices
 Route::resource('device', \App\Http\Controllers\DeviceController::class)->middleware('auth');
+// slik route
+Route::resource('slik', \App\Http\Controllers\SlikController::class)->middleware('auth');
+// perangkat route
+Route::resource('perangkat', \App\Http\Controllers\PerangkatController::class)->middleware('auth');
+// memo route
+Route::resource('memo', \App\Http\Controllers\MemoController::class)->middleware('auth');
+Route::get('memo/{id}/cetak', [\App\Http\Controllers\MemoController::class, 'cetak'])->name('memo.cetak');
