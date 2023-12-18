@@ -1,0 +1,185 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+    font-family: 'calibri', sans-serif;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+
+header {
+    text-align: center;
+}
+header p{
+   padding: 5px;
+   font-weight: bold;
+}
+p.memo-intern{
+    border: 2px solid black;
+    text-align: center;
+    margin-top: 10px;
+    padding: 3px;
+   font-weight: bold;
+}
+.data-debitur table{
+    width: 100%;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.table-header{
+    background-color: rgb(221, 219, 219);
+    width: 50%;
+    
+}
+.table-header td{
+    font-weight: bold;
+}
+table, th, td {
+    border-collapse: collapse;
+}
+/* Optional: Add some padding to cells for better readability */
+th, td {
+    padding: 4px;
+}
+.kredit-debitur table.data-kredit{
+    margin-top: 20px;
+    width: 100%;
+    text-align: left;
+}
+.kredit-debitur table{
+    margin-top: 5px;
+    width: 100%;
+    text-align: left;
+}
+.kredit-debitur table.table-data,.kredit-debitur table.table-data tr, .kredit-debitur table.table-data th, .kredit-debitur table.table-data td{
+    border: 1px solid black;
+}
+.kredit-debitur table thead tr{
+    background-color: rgb(221, 219, 219);
+}

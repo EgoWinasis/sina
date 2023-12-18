@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use PDF;
 
 class MemoController extends Controller
 {
@@ -44,14 +45,14 @@ class MemoController extends Controller
             'tempat_lahir_debitur' => ['required', 'string', 'max:255'],
             'tgl_lahir_debitur' => ['required', 'string', 'max:20'],
             'alamat_debitur' => ['required', 'string', 'max:255'],
-            'file_debitur' => 'mimes:json',
+            'file_debitur' => ['mimes:json','nullable'],
             // penjamin
-            'nama_penjamin' => ['string', 'max:255'],
-            'nik_penjamin' => [''],
-            'tempat_lahir_penjamin' => ['string', 'max:255'],
-            'tgl_lahir_penjamin' => ['string', 'max:20'],
-            'alamat_penjamin' => ['string', 'max:255'],
-            'file_penjamin' => 'mimes:json',
+            'nama_penjamin' => ['string', 'max:255', 'nullable'],
+            'nik_penjamin' => ['max:20', 'nullable'],
+            'tempat_lahir_penjamin' => ['string', 'max:255','nullable'],
+            'tgl_lahir_penjamin' => ['string', 'max:20','nullable'],
+            'alamat_penjamin' => ['string', 'max:255','nullable'],
+            'file_penjamin' => ['mimes:json','nullable'],
         ]);
 
         if ($request->hasFile('file_debitur')) {
@@ -60,7 +61,7 @@ class MemoController extends Controller
             $debiturPath = $debiturFile->storeAs('slik/debitur', $debiturName);
             $validatedData['file_debitur'] = $debiturFile->get();
         } else {
-            $validatedData['file_debitur'] = '';
+            $validatedData['file_debitur'] = null;
         }
 
         if ($request->hasFile('file_penjamin')) {
@@ -69,7 +70,7 @@ class MemoController extends Controller
             $penjaminPath = $penjaminFile->storeAs('slik/penjamin', $penjaminName);
             $validatedData['file_penjamin'] = $penjaminFile->get();
         } else {
-            $validatedData['file_penjamin'] = '';
+            $validatedData['file_penjamin'] = null;
         }
 
         // Optionally, you may want to delete the uploaded files after processing
@@ -126,7 +127,12 @@ class MemoController extends Controller
 
     public function cetak(string $id)
     {
-        //
+        $memo = DB::table('memo')->find($id);
+
+        
+        $pdf = PDF::loadView('memo.memo_cetak_view', ['memo' => $memo]);
+
+        return $pdf->download("Memo ". $memo->nama_debitur .'.pdf');
     }
 
     /**

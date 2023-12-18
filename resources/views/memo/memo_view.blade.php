@@ -58,7 +58,7 @@
                                                     <td>{{ $memo->nama_penjamin }}</td>
                                                     <td>{{ $memo->alamat_debitur }}</td>
                                                     <td class="text-center"> 
-                                                        <a class="btn btn-secondary" onclick="return cetakMemo();" >
+                                                        <a class="btn btn-secondary" href="{{ route('memo.cetak',$memo->id) }}" >
                                                             <i class="far fa-file-pdf"></i>
                                                         </a>
                                                     </td>
@@ -108,9 +108,6 @@
     <script>
         function add() {
             window.location = "{{ route('memo.create') }}";
-        }
-        function cetakMemo() {
-            window.location = "{{ route('memo.cetak', ['id' => $memo->id]) }}";
         }
         $(document).ready(function() {
             var table = $('#table-device').DataTable({
