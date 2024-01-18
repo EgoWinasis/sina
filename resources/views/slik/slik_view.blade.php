@@ -35,32 +35,30 @@
                                                 <th>Kode Referensi</th>
                                                 <th>Tgl Permintaan</th>
                                                 <th>NIK</th>
-                                                <th>Tujuan Permintaan</th>
                                                 <th>Nama</th>
-                                                <th>Tgl Lahir</th>
-                                                <th>Tempat Lahir</th>
-                                                <th>Petugas</th>
+                                                <th>Tujuan Permintaan</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{-- @php
+                                            @php
                                                 $i = 1;
                                             @endphp
-                                            @foreach ($devices as $device)
+                                            @foreach ($register as $regis)
                                                 <tr>
                                                     <td>{{ $i++ }}</td>
-                                                    <td>{{$device->device}}</td>
-                                                    <td>{{$device->user}}</td>
-                                                    <td>{{$device->pemilik}}</td>
-                                                    <td>{{$device->kantor}}</td>
+                                                    <td>{{$regis->no_ref}}</td>
+                                                    <td>{{$regis->tgl_permintaan}}</td>
+                                                    <td>{{$regis->nik}}</td>
+                                                    <td>{{$regis->nama}}</td>
+                                                    <td>{{$regis->tujuan_permintaan}}</td>
                                                     <td>
                                                         <a class="btn btn-info">Show</a>
                                                         <a class="btn btn-primary">Edit</a>
                                                         <a class="btn btn-danger btn-delete">Delete</a>
                                                     </td>
                                                 </tr>
-                                            @endforeach --}}
+                                            @endforeach
                                         </tbody>
 
                                     </table>
@@ -99,7 +97,7 @@
 
     <script>
         function add() {
-            window.location = "{{ route('device.create') }}";
+            window.location = "{{ route('slik.create') }}";
         }
         $(document).ready(function() {
             var table = $('#table-device').DataTable({

@@ -1,23 +1,36 @@
 <?php
 
 // Check the encoding
+// if (!is_null($memo->file_debitur)) {
+//     $encodingDebitur = mb_detect_encoding($memo->file_debitur, 'UTF-8', true);
+// }
+
+// if (!is_null($memo->file_penjamin)) {
+//     $encodingPenjamin = mb_detect_encoding($memo->file_penjamin, 'UTF-8', true);
+// }
+
+// $jsonStringDebitur = null;
+// $jsonStringPenjamin = null;
+
+// if (isset($encodingDebitur) && $encodingDebitur != 'UTF-8') {
+//     $jsonStringDebitur = mb_convert_encoding($memo->file_debitur, 'UTF-8');
+// }
+
+// if (isset($encodingPenjamin) && $encodingPenjamin != 'UTF-8') {
+//     $jsonStringPenjamin = mb_convert_encoding($memo->file_penjamin, 'UTF-8');
+// }
+
+// // Now decode the JSON
+// $dataDebitur = isset($jsonStringDebitur) ? json_decode($jsonStringDebitur) : null;
+// $dataPenjamin = isset($jsonStringPenjamin) ? json_decode($jsonStringPenjamin) : null;
+
 if (!is_null($memo->file_debitur)) {
-    $encodingDebitur = mb_detect_encoding($memo->file_debitur, 'UTF-8', true);
+    $kreditDebitur = json_decode($memo->file_debitur);
 }
+
 if (!is_null($memo->file_penjamin)) {
-    $encodingPenjamin = mb_detect_encoding($memo->file_penjamin, 'UTF-8', true);
+    $kreditPenjamin = json_decode($memo->file_penjamin);
 }
-
-if ($encodingDebitur != 'UTF-8') {
-    $jsonStringDebitur = mb_convert_encoding($memo->file_debitur, 'UTF-8');
-}
-if ($encodingPenjamin != 'UTF-8') {
-    $jsonStringPenjamin = mb_convert_encoding($memo->file_penjamin, 'UTF-8');
-}
-
-// Now decode the JSON
-$dataDebitur = json_decode($jsonStringDebitur);
-$dataPenjamin = json_decode($jsonStringPenjamin);
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +40,7 @@ $dataPenjamin = json_decode($jsonStringPenjamin);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MEMO {{$memo->nama_debitur}}</title>
+    <title>MEMO {{ $memo->nama_debitur }}</title>
     <link rel="stylesheet" href="{{ asset('dist/css/cetak.css') }}">
 </head>
 
@@ -60,7 +73,8 @@ $dataPenjamin = json_decode($jsonStringPenjamin);
             </tr>
             <tr>
                 <td>{{ $memo->tempat_lahir_debitur }}</td>
-                <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $memo->tgl_lahir_debitur)->locale('id')->isoFormat('D-MM-YYYY')  }}</td>
+                <td>{{ $memo->tgl_lahir_debitur }}
+                </td>
                 <td>{{ $memo->alamat_debitur }}</td>
             </tr>
 
@@ -90,31 +104,66 @@ $dataPenjamin = json_decode($jsonStringPenjamin);
                 </tr>
             </thead>
             <tbody>
-                @php
-                    $countDebitur = 0;
-                @endphp
-                @foreach ($dataDebitur->individual->fasilitas->kreditPembiayan as $item)
-                    @if ($item->bakiDebet > 500000)
-                        @php
-                            $countDebitur++;
-                        @endphp
-                        <tr>
-                            <td>{{ $item->ljkKet }}</td>
-                            <td>{{ number_format($item->plafon, 0, ',', '.') }}</td>
-                            <td>{{ number_format($item->bakiDebet, 0, ',', '.') }}</td>
-                            <td>{{ $item->kualitas }}</td>
-                            @if (!empty($item->agunan))
-                                <td>{{ $item->agunan[0]->jenisAgunanKet }}</td>
-                            @else
-                                <td></td>
+                @if (isset($kreditDebitur))
+
+
+                    @php
+                        $countDebitur = 0;
+                    @endphp
+
+                    @if (isset($kreditDebitur) && count($kreditDebitur->individual->fasilitas->kreditPembiayan) > 0)
+                        @foreach ($kreditDebitur->individual->fasilitas->kreditPembiayan as $item)
+                            @if (((int) $item->bakiDebet) > 50000)
+                                @php
+                                    $countDebitur++;
+                                @endphp
+                                <tr>
+                                    <td>{{ $item->ljkKet }}</td>
+                                    <td style="text-align: right">{{ number_format($item->plafon, 0, ',', '.') }}</td>
+                                    <td style="text-align: right">{{ number_format($item->bakiDebet, 0, ',', '.') }}
+                                    </td>
+                                    <td style="text-align: center">{{ $item->kualitas }}</td>
+                                    @if (!empty($item->agunan))
+                                        <td style="text-align: center">{{ $item->agunan[0]->jenisAgunanKet }}</td>
+                                    @else
+                                        <td></td>
+                                    @endif
+                                    <td> {{ \Carbon\Carbon::createFromFormat('Ymd', substr($item->tanggalUpdate, 0, 8))->locale('id')->isoFormat('DD MMMM YYYY') }}
+                                    </td>
+                                </tr>
                             @endif
-                            <td> {{ \Carbon\Carbon::createFromFormat('Ymd', substr($item->tanggalUpdate, 0, 8))->locale('id')->isoFormat('DD MMMM YYYY') }}
-                            </td>
+                        @endforeach
+                    @endif
+                    {{-- cek jika nihil --}}
+                    @if ($countDebitur == 0)
+                        <tr>
+                            <td>NIHIL</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     @endif
-                @endforeach
-                {{-- cek jika nihil --}}
-                @if ($countDebitur == 0)
+                    {{--  --}}
+                    @if ($countDebitur == 0 || $countDebitur < 5)
+                        @while ($countDebitur < 5)
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            @php
+                                $countDebitur++;
+                            @endphp
+                        @endwhile
+                    @endif
+
+                    {{--  --}}
+                @else
                     <tr>
                         <td>NIHIL</td>
                         <td></td>
@@ -123,10 +172,7 @@ $dataPenjamin = json_decode($jsonStringPenjamin);
                         <td></td>
                         <td></td>
                     </tr>
-                @endif
-                {{--  --}}
-                @if ($countDebitur == 0 || $countDebitur < 5)
-                    @while ($countDebitur < 5)
+                    @for ($i = 0; $i < 5; $i++)
                         <tr>
                             <td></td>
                             <td></td>
@@ -135,10 +181,7 @@ $dataPenjamin = json_decode($jsonStringPenjamin);
                             <td></td>
                             <td></td>
                         </tr>
-                        @php
-                            $countDebitur++;
-                        @endphp
-                    @endwhile
+                    @endfor
                 @endif
                 <tr style="background-color: rgb(221, 219, 219);">
                     <td colspan="6"></td>
@@ -157,9 +200,9 @@ $dataPenjamin = json_decode($jsonStringPenjamin);
                 <td width="50%">No. KTP</td>
             </tr>
             <tr>
-                <td>{{ $memo->nama_penjamin }}</td>
+                <td>{{ $memo->nama_penjamin ?? '' }}</td>
                 <td></td>
-                <td>{{ $memo->nik_penjamin }}</td>
+                <td>{{ $memo->nik_penjamin ?? '' }}</td>
             </tr>
             <tr class="table-header">
                 <td>Tempat / Tgl Lahir</td>
@@ -167,9 +210,14 @@ $dataPenjamin = json_decode($jsonStringPenjamin);
                 <td>Alamat</td>
             </tr>
             <tr>
-                <td>{{ $memo->tempat_lahir_penjamin }}</td>
-                <td>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $memo->tgl_lahir_penjamin)->locale('id')->isoFormat('DD-MM-YYYY')  }}</td>
-                <td>{{ $memo->alamat_penjamin }}</td>
+                <td>{{ $memo->tempat_lahir_penjamin ?? '' }}</td>
+                @if (!empty($memo->tgl_lahir_penjamin))
+                    <td>{{ $memo->tgl_lahir_penjamin }}
+                    </td>
+                @else
+                    <td></td>
+                @endif
+                <td>{{ $memo->alamat_penjamin ?? '' }}</td>
             </tr>
 
 
@@ -198,31 +246,66 @@ $dataPenjamin = json_decode($jsonStringPenjamin);
                 </tr>
             </thead>
             <tbody>
-                @php
-                    $countDebitur = 0;
-                @endphp
-                @foreach ($dataDebitur->individual->fasilitas->kreditPembiayan as $item)
-                    @if ($item->bakiDebet > 500000)
-                        @php
-                            $countDebitur++;
-                        @endphp
-                        <tr>
-                            <td>{{ $item->ljkKet }}</td>
-                            <td>{{ number_format($item->plafon, 0, ',', '.') }}</td>
-                            <td>{{ number_format($item->bakiDebet, 0, ',', '.') }}</td>
-                            <td>{{ $item->kualitas }}</td>
-                            @if (!empty($item->agunan))
-                                <td>{{ $item->agunan[0]->jenisAgunanKet }}</td>
-                            @else
-                                <td></td>
+
+                @if (isset($kreditPenjamin))
+                    @php
+                        $countPenjamin = 0;
+                    @endphp
+
+                    @if (isset($kreditPenjamin) && count($kreditPenjamin->individual->fasilitas->kreditPembiayan) > 0)
+                        @foreach ($kreditPenjamin->individual->fasilitas->kreditPembiayan as $itemPenjamin)
+                            @if ($itemPenjamin->bakiDebet > 500000)
+                                @php
+                                    $countPenjamin++;
+                                @endphp
+                                <tr>
+                                    <td>{{ $itemPenjamin->ljkKet }}</td>
+                                    <td style="text-align: right">
+                                        {{ number_format($itemPenjamin->plafon, 0, ',', '.') }}
+                                    </td>
+                                    <td style="text-align: right">
+                                        {{ number_format($itemPenjamin->bakiDebet, 0, ',', '.') }}</td>
+                                    <td style="text-align: center">{{ $itemPenjamin->kualitas }}</td>
+                                    @if (!empty($itemPenjamin->agunan))
+                                        <td style="text-align: center">{{ $itemPenjamin->agunan[0]->jenisAgunanKet }}
+                                        </td>
+                                    @else
+                                        <td></td>
+                                    @endif
+                                    <td> {{ \Carbon\Carbon::createFromFormat('Ymd', substr($itemPenjamin->tanggalUpdate, 0, 8))->locale('id')->isoFormat('D MMMM YYYY') }}
+                                    </td>
+                                </tr>
                             @endif
-                            <td> {{ \Carbon\Carbon::createFromFormat('Ymd', substr($item->tanggalUpdate, 0, 8))->locale('id')->isoFormat('D MMMM YYYY') }}
-                            </td>
+                        @endforeach
+                    @endif
+                    {{-- cek jika nihil --}}
+                    @if ($countPenjamin == 0 && $memo->nama_penjamin != null)
+                        <tr>
+                            <td>NIHIL</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     @endif
-                @endforeach
-                {{-- cek jika nihil --}}
-                @if ($countDebitur == 0)
+                    {{--  --}}
+                    @if ($countPenjamin == 0 || $countPenjamin < 5)
+                        @while ($countPenjamin < 5)
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            @php
+                                $countPenjamin++;
+                            @endphp
+                        @endwhile
+                    @endif
+                @else
                     <tr>
                         <td>NIHIL</td>
                         <td></td>
@@ -231,10 +314,7 @@ $dataPenjamin = json_decode($jsonStringPenjamin);
                         <td></td>
                         <td></td>
                     </tr>
-                @endif
-                {{--  --}}
-                @if ($countDebitur == 0 || $countDebitur < 5)
-                    @while ($countDebitur < 5)
+                    @for ($i = 0; $i < 5; $i++)
                         <tr>
                             <td></td>
                             <td></td>
@@ -243,10 +323,7 @@ $dataPenjamin = json_decode($jsonStringPenjamin);
                             <td></td>
                             <td></td>
                         </tr>
-                        @php
-                            $countDebitur++;
-                        @endphp
-                    @endwhile
+                    @endfor
                 @endif
                 <tr style="background-color: rgb(221, 219, 219);">
                     <td colspan="6"></td>

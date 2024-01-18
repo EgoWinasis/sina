@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Device;
 use Illuminate\Support\Facades\DB;
 
@@ -56,7 +57,7 @@ class DeviceController extends Controller
         $validatedData['user'] = strtoupper($validatedData['user']);
         $validatedData['pemilik'] = strtoupper($validatedData['pemilik']);
         $validatedData['kantor'] = strtoupper($validatedData['kantor']);
-        
+
         Device::create($validatedData);
         return redirect()
             ->route('device.index')
@@ -76,7 +77,12 @@ class DeviceController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $device = DB::table('devices')
+            ->select('*')
+            ->where('id', '=', $id)
+            ->get();
+
+        return view('device.device_edit_view')->with(compact('device'));
     }
 
     /**
@@ -84,7 +90,29 @@ class DeviceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validatedData = $request->validate([
+            'device' => [
+                'required',
+                'string',
+                'min:10',
+                'max:10',
+            ],
+            'user' => ['required', 'string', 'max:255', 'nullable'],
+            'pemilik' => ['required', 'string', 'max:255', 'nullable'],
+            'kantor' => ['required', 'string', 'max:255', 'nullable'],
+        ]);
+
+        // Convert the values to uppercase
+        $validatedData['device'] = strtoupper($validatedData['device']);
+        $validatedData['user'] = strtoupper($validatedData['user']);
+        $validatedData['pemilik'] = strtoupper($validatedData['pemilik']);
+        $validatedData['kantor'] = strtoupper($validatedData['kantor']);
+
+        $device = Device::find($id);
+        $device->update($validatedData);
+        return redirect()
+            ->route('device.index')
+            ->with('success', 'Berhasil Update Data Display Device');
     }
 
     /**

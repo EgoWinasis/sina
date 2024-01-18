@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('nik',20);
             $table->string('tujuan_permintaan',3);
             $table->string('nama',255);
-            $table->date('tgl_lahir');
+            $table->string('tgl_lahir', 20);
             $table->string('tempat_lahir',255);
-            $table->string('petugas',3);
+            $table->string('alamat',255);
+            $table->string('petugas',255);
             $table->timestamps();
         });
     }

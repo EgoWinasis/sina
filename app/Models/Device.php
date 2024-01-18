@@ -9,7 +9,7 @@ class Device extends Model
 {
     use HasFactory;
 
-    public $table = "device";
+    public $table = "devices";
 
     protected $fillable = [
         'device',

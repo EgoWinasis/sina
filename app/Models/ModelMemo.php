@@ -10,6 +10,7 @@ class ModelMemo extends Model
     use HasFactory;
     public $table = "memo";
     protected $fillable = [
+        'id_register',
         'marketing',
         // 
         'nama_debitur',
