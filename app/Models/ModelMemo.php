@@ -18,6 +18,7 @@ class ModelMemo extends Model
         'tempat_lahir_debitur',
         'tgl_lahir_debitur',
         'alamat_debitur',
+        'tipe_debitur',
         'file_debitur',
         // 
         'nama_penjamin',
@@ -25,6 +26,7 @@ class ModelMemo extends Model
         'tempat_lahir_penjamin',
         'tgl_lahir_penjamin',
         'alamat_penjamin',
+        'tipe_penjamin',
         'file_penjamin',
     ];
 }

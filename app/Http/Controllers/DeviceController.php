@@ -12,6 +12,19 @@ class DeviceController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            if (!auth()->check()) {
+                abort(403, 'Unauthorized');
+            }
+    
+            $user = auth()->user();
+    
+            if ($user->role !== 'super') {
+                abort(403, 'Unauthorized');
+            }
+    
+            return $next($request);
+        });
     }
     /**
      * Display a listing of the resource.

@@ -14,9 +14,9 @@ return [
     |
     */
 
-    'title' => 'SINA',
+    'title' => 'SIDA V2',
     'title_prefix' => '',
-    'title_postfix' => 'SINA',
+    'title_postfix' => '',
 
     /*
     |--------------------------------------------------------------------------
@@ -260,7 +260,10 @@ return [
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
     'profile_url' => false,
-
+    'lock_screen' => [
+        'enable' => true,
+        'route' => 'lockscreen',
+    ],
     /*
     |--------------------------------------------------------------------------
     | Laravel Mix
@@ -291,11 +294,11 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
-            'topnav_right' => true,
-        ],
+        // [
+        //     'type'         => 'navbar-search',
+        //     'text'         => 'search',
+        //     'topnav_right' => true,
+        // ],
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
@@ -319,13 +322,20 @@ return [
         ['header' => 'account_settings'],
         [
             'text' => 'profile',
-            'url'  => 'admin/settings',
+            'url'  => 'profile',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
             'text' => 'change_password',
-            'url'  => 'admin/settings',
+            'url'  => 'password',
             'icon' => 'fas fa-fw fa-lock',
+
+        ],
+        [
+            'text'        => 'IP Address',
+            'url'         => '/ipaddress',
+            'icon'        => 'fas fa-network-wired',
+            'can' => 'isSuper'
         ],
         [
             'text'    => 'Display',
@@ -341,6 +351,7 @@ return [
                     'url'  => '/printer',
                 ],
             ],
+            'can' => 'isSuper'
         ],
         [
             'text'    => 'Akun',
@@ -352,19 +363,24 @@ return [
                 ],
                 [
                     'text' => 'Sosmed',
-                    'url'  => '#',
+                    'url'  => '/sosmed',
                 ],
                 [
                     'text' => 'Perangkat',
                     'url'  => '/perangkat',
                 ],
             ],
+            'can' => 'isSuper'
+
         ],
         [
-            'text'        => 'IP Address',
-            'url'         => '/ipaddress',
-            'icon'        => 'fas fa-network-wired'
+            'text'    => 'Users',
+            'url'         => '/pengguna',
+            'icon'    => 'fas fa-users',
+            'can' => 'isSuper'
+
         ],
+
         [
             'text'    => 'SLIK',
             'icon'    => 'fas fa-clipboard',
@@ -377,24 +393,31 @@ return [
                     'text' => 'Memo',
                     'url'  => '/memo',
                 ],
+                [
+                    'text' => 'Report',
+                    'url'  => '/report',
+                ],
             ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
+            'can' => ['isSuper', 'isAdmin']
         ],
         [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
+            'text'    => 'Desain',
+            'icon'    => 'fas fa-brush',
+            'submenu' => [
+                [
+                    'text' => 'Banner',
+                    'url'  => '/banner',
+                ],
+                [
+                    'text' => 'Hari Besar',
+                    'url'  => '/hari-besar',
+                ],
+                
+            ],
+            'can' => ['isSuper', 'isMarkom']
         ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
-        ],
+
+
     ],
 
     /*
@@ -465,6 +488,11 @@ return [
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
                 ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css',
+                ],
             ],
         ],
         'Chartjs' => [
@@ -478,7 +506,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',

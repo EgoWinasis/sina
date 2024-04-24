@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'BPR Nusamba Adiwerna - Display Device')
+@section('title', 'BPR Nusamba Adiwerna - Register SLIK')
 
 @section('content')
     <div id="layoutSidenav">
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid">
-                    <h1 class="mt-4">SLIK</h1>
+                    <h1 class="mt-4">SLIK INDIVIDU</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item">SLIK</li>
                         <li class="breadcrumb-item active">Add</li>
@@ -36,7 +36,14 @@
                                                     $options = [];
                                                     foreach ($dataSidaImport as $import) {
                                                         $id = $import->id;
-                                                        $nama = $import->nm . ' - ' . $import->ktp . ' - ' . $import->tm . ' - ' . $import->almt;
+                                                        $nama =
+                                                            $import->nm .
+                                                            ' - ' .
+                                                            $import->ktp .
+                                                            ' - ' .
+                                                            $import->tm .
+                                                            ' - ' .
+                                                            $import->almt;
                                                         $options[$id] = $nama;
                                                     }
 
@@ -63,6 +70,7 @@
                                     @endif
                                     <form method="POST" action="{{ route('slik.store') }}">
                                         @csrf
+                                        <input type="hidden" name="tipe" value="individu">
                                         <x-adminlte-input readonly name="no_ref" label="Kode Referensi"
                                             value="{{ $no_ref }}" placeholder="{{ $no_ref }}"
                                             label-class="text-lightblue">
@@ -131,7 +139,7 @@
                                         </x-adminlte-input>
 
                                         <x-adminlte-input name="tgl_lahir" id="tgl_lahir" label="Tanggal Lahir"
-                                            value="{{ old('tgl_lahir') }}" placeholder="Tanggal Lahir"
+                                            value="{{ old('tgl_lahir') }}" placeholder="contoh: 05121999"
                                             label-class="text-lightblue">
                                             <x-slot name="prependSlot">
                                                 <div class="input-group-text">
@@ -158,19 +166,50 @@
                                             </x-slot>
                                         </x-adminlte-input>
                                         @php
-                                            $petugas = 'Adit';
+                                            if (auth()->user()->kantor == 'Kantor Pusat Operasional') {
+                                                $options = [
+                                                    'Adit' => 'Adit',
+                                                    'Juwieta' => 'Juwieta',
+                                                    'Nisa' => 'Nisa',
+                                                ];
+
+                                                if (!empty(old('petugas'))) {
+                                                    $selected = [old('petugas')];
+                                                } else {
+                                                    $selected = ['Juwieta'];
+                                                }
+                                            } elseif (auth()->user()->kantor == 'Kantor Cabang Purwokerto') {
+                                                $options = [
+                                                    'Ainda' => 'Ainda',
+                                                ];
+
+                                                if (!empty(old('petugas'))) {
+                                                    $selected = [old('petugas')];
+                                                } else {
+                                                    $selected = ['Ainda'];
+                                                }
+                                            }elseif (auth()->user()->kantor == 'Kantor Cabang Cilacap') {
+                                                $options = [
+                                                    'Retno' => 'Retno',
+                                                ];
+
+                                                if (!empty(old('petugas'))) {
+                                                    $selected = [old('petugas')];
+                                                } else {
+                                                    $selected = ['Retno'];
+                                                }
+                                            }
                                         @endphp
-                                        <x-adminlte-input value="{{ $petugas }}" readonly name="petugas"
-                                            label="Petugas" placeholder="{{ $petugas }}"
+                                        <x-adminlte-select2 name="petugas" label="Petugas" igroup-size="md"
                                             label-class="text-lightblue">
                                             <x-slot name="prependSlot">
                                                 <div class="input-group-text">
                                                     <i class="fas fa-user-tie text-lightblue"></i>
                                                 </div>
                                             </x-slot>
-                                        </x-adminlte-input>
+                                            <x-adminlte-options :options="$options" :selected="$selected" />
+                                        </x-adminlte-select2>
 
-                                        {{--  --}}
                                         <div class=" d-flex justify-content-center">
                                             <x-adminlte-button class="btn-flat" type="submit" label="Submit"
                                                 theme="success" icon="fas fa-lg fa-save" />
@@ -182,13 +221,8 @@
                     </div>
                 </div>
             </main>
-            <footer class="py-4 bg-light mt-auto fixed-bottom ">
-                <div class="container-fluid ">
-                    <div class="d-flex align-items-center justify-content-center small">
-                        <div class="text-muted ">Copyright &copy; IT BPR Nusamba Adiwerna {!! date('Y') !!}</div>
-                    </div>
-                </div>
-            </footer>
+            @include('footer')
+
         </div>
     </div>
 
@@ -201,7 +235,7 @@
         href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/sp-2.2.0/datatables.min.css"
         rel="stylesheet">
 @endsection
-
+@section('plugins.Select2', true)
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
@@ -230,13 +264,7 @@
                             columns: [0, 1, 2, 3] // Exclude the 4th column (Aksi)
                         }
                     },
-                    {
-                        extend: 'print',
-                        text: 'Print',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3] // Exclude the 4th column (Aksi)
-                        }
-                    },
+
                 ],
                 searching: true,
                 paging: true,

@@ -35,7 +35,7 @@ return [
         ]
     ],
     'auto_language_detection'  => false,
-    'temp_dir'                 => storage_path('app'),
+    'temp_dir'                 => public_path('mpdf/temp'),
     'pdfa'                     => false,
     'pdfaauto'                 => false,
     'use_active_forms'         => false,

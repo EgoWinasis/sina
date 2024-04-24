@@ -20,5 +20,6 @@ class RegisterSlikModel extends Model
         'tempat_lahir',
         'alamat',
         'petugas',
+        'tipe',
     ];
 }

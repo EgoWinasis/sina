@@ -8,17 +8,34 @@ use Illuminate\Support\Facades\DB;
 
 class PerangkatController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            if (!auth()->check()) {
+                abort(403, 'Unauthorized');
+            }
+
+            $user = auth()->user();
+
+            if ($user->role !== 'super') {
+                abort(403, 'Unauthorized');
+            }
+
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $perangkats = DB::table('perangkats')
-        ->select('id', 'perangkat', 'username', 'password', 'kantor')
-        ->orderBy('id')
-        ->get();
+            ->select('id', 'perangkat', 'kantor')
+            ->orderBy('id')
+            ->get();
 
-    return view('perangkat.perangkat_view')->with(compact('perangkats'));
+        return view('perangkat.perangkat_view')->with(compact('perangkats'));
     }
 
     /**
@@ -35,7 +52,7 @@ class PerangkatController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'perangkat' => ['required','string', 'max:255'],
+            'perangkat' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'max:255'],
             'kantor' => ['required', 'string', 'max:255'],
@@ -55,7 +72,12 @@ class PerangkatController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data = DB::table('perangkats')
+            ->select('*')
+            ->where('id', '=', $id)
+            ->get();
+
+        return response()->json(['data' => $data]);
     }
 
     /**

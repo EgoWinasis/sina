@@ -95,7 +95,8 @@
                                     </div>
                                     <form method="POST" action="{{ route('memo.store') }}" enctype="multipart/form-data">
                                         @csrf
-                                        <input type="hidden" name="id_register" id="id_register-debitur">
+                                        <input type="hidden" name="id_register" id="id_register-debitur"
+                                            value="{{ old('id_register') }}">
                                         <x-adminlte-input name="marketing" required label="Marketing"
                                             value="{{ old('marketing') }}" placeholder="Nama Marketing"
                                             label-class="text-lightblue">
@@ -107,6 +108,16 @@
                                         </x-adminlte-input>
                                         <div class="row">
                                             <div class="col-xl-6">
+                                                <x-adminlte-input readonly required name="tipe_debitur" id="tipe-debitur"
+                                                    label="Tipe Debitur" value="{{ old('tipe_debitur') }}"
+                                                    placeholder="Tipe Debitur" label-class="text-lightblue">
+                                                    <x-slot name="prependSlot">
+                                                        <div class="input-group-text">
+                                                            <i class="fas fa-user-cog text-lightblue"></i>
+                                                        </div>
+                                                    </x-slot>
+                                                </x-adminlte-input>
+
                                                 <x-adminlte-input required name="nama_debitur" id="nama-debitur"
                                                     label="Debitur" value="{{ old('nama_debitur') }}"
                                                     placeholder="Nama Debitur" label-class="text-lightblue">
@@ -125,7 +136,8 @@
                                                         </div>
                                                     </x-slot>
                                                 </x-adminlte-input>
-                                                <x-adminlte-input required name="tempat_lahir_debitur" id="tempat_lahir-debitur" label="Tempat Lahir"
+                                                <x-adminlte-input required name="tempat_lahir_debitur"
+                                                    id="tempat_lahir-debitur" label="Tempat Lahir"
                                                     value="{{ old('tempat_lahir_debitur') }}" placeholder="Tempat Lahir"
                                                     label-class="text-lightblue">
                                                     <x-slot name="prependSlot">
@@ -134,18 +146,19 @@
                                                         </div>
                                                     </x-slot>
                                                 </x-adminlte-input>
-                                                <x-adminlte-input required name="tgl_lahir_debitur" id="tgl_lahir-debitur" class="tanggalInput"
-                                                    label="Tanggal Lahir" value="{{ old('tgl_lahir_debitur') }}"
-                                                    placeholder="Tanggal Lahir" label-class="text-lightblue">
+                                                <x-adminlte-input required name="tgl_lahir_debitur" id="tgl_lahir-debitur"
+                                                    class="tanggalInput" label="Tanggal Lahir"
+                                                    value="{{ old('tgl_lahir_debitur') }}" placeholder="Tanggal Lahir"
+                                                    label-class="text-lightblue">
                                                     <x-slot name="prependSlot">
                                                         <div class="input-group-text">
                                                             <i class="fas fa-calendar-alt text-lightblue"></i>
                                                         </div>
                                                     </x-slot>
                                                 </x-adminlte-input>
-                                                <x-adminlte-input required name="alamat_debitur" id="alamat-debitur" label="Alamat Debitur"
-                                                    value="{{ old('alamat_debitur') }}" placeholder="Alamat Debitur"
-                                                    label-class="text-lightblue">
+                                                <x-adminlte-input required name="alamat_debitur" id="alamat-debitur"
+                                                    label="Alamat Debitur" value="{{ old('alamat_debitur') }}"
+                                                    placeholder="Alamat Debitur" label-class="text-lightblue">
                                                     <x-slot name="prependSlot">
                                                         <div class="input-group-text">
                                                             <i class="fas fa-map-marker-alt text-lightblue"></i>
@@ -162,45 +175,56 @@
                                                 </x-adminlte-input-file>
                                             </div>
                                             <div class="col-xl-6">
-                                                <x-adminlte-input name="nama_penjamin" id="nama-penjamin" label="Penjamin"
-                                                    value="{{ old('nama_penjamin') }}" placeholder="Nama Penjamin"
+                                                <x-adminlte-input readonly required name="tipe_penjamin"
+                                                    id="tipe-penjamin" label="Tipe Penjamin"
+                                                    value="{{ old('tipe_penjamin') }}" placeholder="Tipe Penjamin"
                                                     label-class="text-lightblue">
+                                                    <x-slot name="prependSlot">
+                                                        <div class="input-group-text">
+                                                            <i class="fas fa-user-cog text-lightblue"></i>
+                                                        </div>
+                                                    </x-slot>
+                                                </x-adminlte-input>
+                                                <x-adminlte-input name="nama_penjamin" id="nama-penjamin"
+                                                    label="Penjamin" value="{{ old('nama_penjamin') }}"
+                                                    placeholder="Nama Penjamin" label-class="text-lightblue">
                                                     <x-slot name="prependSlot">
                                                         <div class="input-group-text">
                                                             <i class="fas fa-user-shield text-lightblue"></i>
                                                         </div>
                                                     </x-slot>
                                                 </x-adminlte-input>
-                                                <x-adminlte-input name="nik_penjamin" label="NIK" id="nik-penjamin" type="number" min=0
-                                                    value="{{ old('nik_penjamin') }}" placeholder="NIK"
-                                                    label-class="text-lightblue">
+                                                <x-adminlte-input name="nik_penjamin" label="NIK" id="nik-penjamin"
+                                                    type="number" min=0 value="{{ old('nik_penjamin') }}"
+                                                    placeholder="NIK" label-class="text-lightblue">
                                                     <x-slot name="prependSlot">
                                                         <div class="input-group-text">
                                                             <i class="fas fa-user text-lightblue"></i>
                                                         </div>
                                                     </x-slot>
                                                 </x-adminlte-input>
-                                                <x-adminlte-input name="tempat_lahir_penjamin" id="tempat_lahir-penjamin" label="Tempat Lahir"
-                                                    value="{{ old('tempat_lahir_penjamin') }}" placeholder="Tempat Lahir"
-                                                    label-class="text-lightblue">
+                                                <x-adminlte-input name="tempat_lahir_penjamin" id="tempat_lahir-penjamin"
+                                                    label="Tempat Lahir" value="{{ old('tempat_lahir_penjamin') }}"
+                                                    placeholder="Tempat Lahir" label-class="text-lightblue">
                                                     <x-slot name="prependSlot">
                                                         <div class="input-group-text">
                                                             <i class="fas fa-home text-lightblue"></i>
                                                         </div>
                                                     </x-slot>
                                                 </x-adminlte-input>
-                                                <x-adminlte-input name="tgl_lahir_penjamin" id="tgl_lahir-penjamin" class="tanggalInput"
-                                                    label="Tanggal Lahir" value="{{ old('tgl_lahir_penjamin') }}"
-                                                    placeholder="Tanggal Lahir" label-class="text-lightblue">
+                                                <x-adminlte-input name="tgl_lahir_penjamin" id="tgl_lahir-penjamin"
+                                                    class="tanggalInput" label="Tanggal Lahir"
+                                                    value="{{ old('tgl_lahir_penjamin') }}" placeholder="Tanggal Lahir"
+                                                    label-class="text-lightblue">
                                                     <x-slot name="prependSlot">
                                                         <div class="input-group-text">
                                                             <i class="fas fa-calendar-alt text-lightblue"></i>
                                                         </div>
                                                     </x-slot>
                                                 </x-adminlte-input>
-                                                <x-adminlte-input name="alamat_penjamin" id="alamat-penjamin" label="Alamat Penjamin"
-                                                    value="{{ old('alamat_penjamin') }}" placeholder="Alamat Penjamin"
-                                                    label-class="text-lightblue">
+                                                <x-adminlte-input name="alamat_penjamin" id="alamat-penjamin"
+                                                    label="Alamat Penjamin" value="{{ old('alamat_penjamin') }}"
+                                                    placeholder="Alamat Penjamin" label-class="text-lightblue">
                                                     <x-slot name="prependSlot">
                                                         <div class="input-group-text">
                                                             <i class="fas fa-map-marker-alt text-lightblue"></i>
@@ -230,17 +254,13 @@
                     </div>
                 </div>
             </main>
-            <footer class="py-4 bg-light mt-auto fixed-bottom ">
-                <div class="container-fluid ">
-                    <div class="d-flex align-items-center justify-content-center small">
-                        <div class="text-muted ">Copyright &copy; IT BPR Nusamba Adiwerna {!! date('Y') !!}</div>
-                    </div>
-                </div>
-            </footer>
+            @include('footer')
+
         </div>
     </div>
 
 @stop
+@section('plugins.Select2', true)
 
 @section('js')
     {{-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -261,7 +281,7 @@
                 if (selectedValue) {
                     // Get the corresponding data from the options array
                     var selectedData = @json($register->keyBy('id')->all());
-                   
+
 
                     $('#id_register-debitur').val(selectedData[selectedValue]['id']);
                     $('#nama-debitur').val(selectedData[selectedValue]['nama']);
@@ -269,6 +289,26 @@
                     $('#alamat-debitur').val(selectedData[selectedValue]['alamat']);
                     $('#tempat_lahir-debitur').val(selectedData[selectedValue]['tempat_lahir']);
                     $('#tgl_lahir-debitur').val(selectedData[selectedValue]['tgl_lahir']);
+                    // 
+                    var tipeDebitur = selectedData[selectedValue]['tipe'];
+                    var uppercaseTipeDebitur = tipeDebitur.toUpperCase();
+                    $('#tipe-debitur').val(uppercaseTipeDebitur);
+
+
+
+                    var nikDebiturLabel = $('label[for="nik-debitur"]');
+                    var tempatDebiturLabel = $('label[for="tempat_lahir-debitur"]');
+                    var tglDebiturLabel = $('label[for="tgl_lahir-debitur"]');
+                    // Change the for attribute based on the value of tipeDebitur
+                    if (tipeDebitur === 'perusahaan') {
+                        nikDebiturLabel.text('NPWP');
+                        tempatDebiturLabel.text('Tempat Pendirian');
+                        tglDebiturLabel.text('Tanggal Pendirian');
+                    } else {
+                        nikDebiturLabel.text('NIK');
+                        tempatDebiturLabel.text('Tempat Lahir');
+                        tglDebiturLabel.text('Tanggal Lahir');
+                    }
                 }
             });
 
@@ -280,15 +320,36 @@
                 if (selectedValue) {
                     // Get the corresponding data from the options array
                     var selectedData = @json($register->keyBy('id')->all());
-                   
+
 
                     $('#nama-penjamin').val(selectedData[selectedValue]['nama']);
                     $('#nik-penjamin').val(selectedData[selectedValue]['nik']);
                     $('#alamat-penjamin').val(selectedData[selectedValue]['alamat']);
                     $('#tempat_lahir-penjamin').val(selectedData[selectedValue]['tempat_lahir']);
                     $('#tgl_lahir-penjamin').val(selectedData[selectedValue]['tgl_lahir']);
+                    // 
+                    var tipePenjamin = selectedData[selectedValue]['tipe'];
+                    var uppercaseTipePenjamin = tipePenjamin.toUpperCase();
+                    $('#tipe-penjamin').val(uppercaseTipePenjamin);
+
+
+                    var nikPenjaminLabel = $('label[for="nik-penjamin"]');
+                    var tempatPenjaminLabel = $('label[for="tempat_lahir-penjamin"]');
+                    var tglPenjaminLabel = $('label[for="tgl_lahir-penjamin"]');
+                    // Change the for attribute based on the value of tipePenjamin
+                    if (tipePenjamin === 'perusahaan') {
+                        nikPenjaminLabel.text('NPWP');
+                        tempatPenjaminLabel.text('Tempat Pendirian');
+                        tglPenjaminLabel.text('Tanggal Pendirian');
+                    } else {
+                        nikPenjaminLabel.text('NIK');
+                        tempatPenjaminLabel.text('Tempat Lahir');
+                        tglPenjaminLabel.text('Tanggal Lahir');
+                    }
                 }
             });
+
+
         });
     </script>
 @endsection

@@ -27,7 +27,7 @@
                                             icon="fas fa-plus" />
                                     </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body table-responsive">
                                     <table id="table-device" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
@@ -51,10 +51,10 @@
                                                     <td>{{ $device->pemilik }}</td>
                                                     <td>{{ $device->kantor }}</td>
                                                     <td>
-                                                        <a class="btn btn-info">Show</a>
-                                                        <a class="btn btn-primary"
+                                                        <a class="btn btn-info m-2">Show</a>
+                                                        <a class="btn btn-primary m-2"
                                                             href="{{ route('device.edit', $device->id) }}">Edit</a>
-                                                        <a class="btn btn-danger btn-delete">Delete</a>
+                                                        <a class="btn btn-danger m-2 btn-delete">Delete</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -67,13 +67,7 @@
                     </div>
                 </div>
             </main>
-            <footer class="py-4 bg-light mt-auto fixed-bottom ">
-                <div class="container-fluid ">
-                    <div class="d-flex align-items-center justify-content-center small">
-                        <div class="text-muted ">Copyright &copy; IT BPR Nusamba Adiwerna {!! date('Y') !!}</div>
-                    </div>
-                </div>
-            </footer>
+            @include('footer')
         </div>
     </div>
 
@@ -105,21 +99,21 @@
                         extend: 'excel',
                         text: 'Excel',
                         exportOptions: {
-                            columns: [0, 1, 2, 3] // Exclude the 4th column (Aksi)
+                            columns: [0, 1, 2, 3,4] // Exclude the 4th column (Aksi)
                         }
                     },
                     {
                         extend: 'pdf',
                         text: 'PDF',
                         exportOptions: {
-                            columns: [0, 1, 2, 3] // Exclude the 4th column (Aksi)
+                            columns: [0, 1, 2, 3,4] // Exclude the 4th column (Aksi)
                         }
                     },
                     {
                         extend: 'print',
                         text: 'Print',
                         exportOptions: {
-                            columns: [0, 1, 2, 3] // Exclude the 4th column (Aksi)
+                            columns: [0, 1, 2, 3,4] // Exclude the 4th column (Aksi)
                         }
                     },
                 ],

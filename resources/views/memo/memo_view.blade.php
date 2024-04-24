@@ -64,12 +64,12 @@
                                                         </a>
                                                     </td>
                                                     <td class="text-center">
-                                                        <a class="btn btn-info" data-toggle="modal" data-target="#memoModal"
-                                                            data-memo-id="{{ $memo->id }}">
+                                                        <a class="btn btn-info m-2" data-toggle="modal"
+                                                            data-target="#memoModal" data-memo-id="{{ $memo->id }}">
                                                             Show</a>
-                                                        <a class="btn btn-primary"
+                                                        <a class="btn btn-primary m-2"
                                                             href="{{ route('memo.edit', $memo->id) }}">Edit</a>
-                                                        <a class="btn btn-danger btn-delete">Delete</a>
+                                                        {{-- <a class="btn btn-danger btn-delete m-2">Delete</a> --}}
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -89,7 +89,7 @@
                 <!-- Modal -->
                 <div class="modal fade" id="memoModal" tabindex="-1" role="dialog" aria-labelledby="memoModalLabel"
                     aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="memoModalLabel">Memo Details</h5>
@@ -103,14 +103,9 @@
                         </div>
                     </div>
                 </div>
+
             </main>
-            <footer class="py-4 bg-light mt-auto fixed-bottom ">
-                <div class="container-fluid ">
-                    <div class="d-flex align-items-center justify-content-center small">
-                        <div class="text-muted ">Copyright &copy; IT BPR Nusamba Adiwerna {!! date('Y') !!}</div>
-                    </div>
-                </div>
-            </footer>
+            @include('footer')
         </div>
     </div>
 
@@ -142,26 +137,25 @@
                         extend: 'excel',
                         text: 'Excel',
                         exportOptions: {
-                            columns: [0, 1, 2, 3] // Exclude the 4th column (Aksi)
+                            columns: [0, 1, 2, 3,4,5] // Exclude the 4th column (Aksi)
                         }
                     },
                     {
                         extend: 'pdf',
                         text: 'PDF',
                         exportOptions: {
-                            columns: [0, 1, 2, 3] // Exclude the 4th column (Aksi)
+                            columns: [0, 1, 2, 3,4,5] // Exclude the 4th column (Aksi)
                         }
                     },
-                    {
-                        extend: 'print',
-                        text: 'Print',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3] // Exclude the 4th column (Aksi)
-                        }
-                    },
+
                 ],
                 searching: true,
+                'ordering': false,
                 paging: true,
+                columnDefs: [{
+                    width: '20%',
+                    targets: 7
+                }],
             });
         });
     </script>
@@ -180,9 +174,29 @@
                     dataType: 'json',
                     contentType: 'application/json; charset=utf-8',
                     success: function(response) {
+                        // console.log(response.data);
                         // Update the modal content with the data received from the server
-                        $('#memoModal .modal-body').html('<p>' + response.data.nama_debitur +
-                            '</p>');
+                        if (response && response.data) {
+                            var debitur = response.data[0];
+                            // Update the modal content with the received data for the debtor
+                            var html = '<table class="table" width="100%">';
+                            for (var key in debitur) {
+                                if (key !== 'id' && key !== 'id_register' && key !==
+                                    'file_debitur' && key !== 'file_penjamin') {
+                                    html += '<tr><td width="30%">' + key.replace(/_/g, ' ').toUpperCase() +
+                                        '</td><td>:</td><td>' + debitur[key] + '</td></tr>';
+                                }
+                            }
+                            html += '</table>';
+                            $('#memoModal .modal-body').html(html);
+
+
+
+                            // Similarly, you can access and display data for the guarantor if needed
+                        } else {
+                            console.log('Invalid response format or missing data');
+                            // Optionally, show an error message or handle the situation differently
+                        }
                     },
                     error: function(error) {
                         console.log(error);

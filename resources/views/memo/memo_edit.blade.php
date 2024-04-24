@@ -182,17 +182,12 @@
                     </div>
                 </div>
             </main>
-            <footer class="py-4 bg-light mt-auto fixed-bottom ">
-                <div class="container-fluid ">
-                    <div class="d-flex align-items-center justify-content-center small">
-                        <div class="text-muted ">Copyright &copy; IT BPR Nusamba Adiwerna {!! date('Y') !!}</div>
-                    </div>
-                </div>
-            </footer>
+          @include('footer')
         </div>
     </div>
 
 @stop
+@section('plugins.Select2', true)
 
 @section('js')
     {{-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
