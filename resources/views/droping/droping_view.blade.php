@@ -1,32 +1,23 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Droping')
 
 @section('content')
     <div id="layoutSidenav">
         <div id="layoutSidenav_content">
             <main>
-                @if (auth()->check())
-                    @if (auth()->user()->jabatan == '-' && auth()->user()->image == 'user_default.png' && auth()->user()->kantor == '-')
-                        @include('dashboard/dashboard_awal')
-                    @elseif (auth()->user()->role == 'super')
-                        @include('dashboard/dashboard_super')
-                    @elseif (auth()->user()->role == 'user' && auth()->user()->jabatan == 'Staf Kredit')
-                        @include('dashboard/dashboard_kredit')
-                    @elseif (auth()->user()->role == 'user' && auth()->user()->jabatan == 'Kepala Kantor Kas')
-                        @include('dashboard/dashboard_kepala')
-                    @elseif (auth()->user()->role == 'user' &&
-                            (auth()->user()->jabatan == 'KKPO' ||
-                                auth()->user()->jabatan == 'Kepala Kantor Cabang' ||
-                                auth()->user()->jabatan == 'Direktur' ||
-                                auth()->user()->jabatan == 'Direktur Utama' ||
-                                auth()->user()->jabatan == 'Komisaris'))
-                        @include('dashboard/dashboard_direksi')
-                    @else
-                        @include('dashboard/dashboard_super')
-                    @endif
-                @endif
 
+                <div class="container-fluid">
+                    <h1 class="mt-4">Droping</h1>
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item active">Droping</li>
+                    </ol>
+                    @include('table.droping_ao')
+                    @include('table.droping_wilayah')
+                    @include('table.droping_ao_npl')
+                    @include('table.droping_fo')
+
+                </div>
             </main>
             @include('footer')
         </div>
@@ -268,33 +259,7 @@
     </script>
 
 
-    @if (session('show_welcome_message'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                let now = new Date();
-                let hours = now.getHours();
-                let timeOfDay;
 
-                if (hours < 12) {
-                    timeOfDay = 'Pagi';
-                } else if (hours < 18) {
-                    timeOfDay = 'Siang';
-                } else {
-                    timeOfDay = 'Malam';
-                }
-
-                let userName = '{{ $userName }}';
-                let welcomeMessage = `Selamat ${timeOfDay}, ${userName}`;
-
-                Swal.fire({
-                    type: 'info',
-                    title: welcomeMessage,
-                    showConfirmButton: false,
-                    timer: 5000
-                });
-            });
-        </script>
-    @endif
 
 
 @stop

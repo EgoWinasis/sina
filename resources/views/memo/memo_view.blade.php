@@ -137,14 +137,14 @@
                         extend: 'excel',
                         text: 'Excel',
                         exportOptions: {
-                            columns: [0, 1, 2, 3,4,5] // Exclude the 4th column (Aksi)
+                            columns: [0, 1, 2, 3, 4, 5] // Exclude the 4th column (Aksi)
                         }
                     },
                     {
                         extend: 'pdf',
                         text: 'PDF',
                         exportOptions: {
-                            columns: [0, 1, 2, 3,4,5] // Exclude the 4th column (Aksi)
+                            columns: [0, 1, 2, 3, 4, 5] // Exclude the 4th column (Aksi)
                         }
                     },
 
@@ -183,10 +183,14 @@
                             for (var key in debitur) {
                                 if (key !== 'id' && key !== 'id_register' && key !==
                                     'file_debitur' && key !== 'file_penjamin') {
-                                    html += '<tr><td width="30%">' + key.replace(/_/g, ' ').toUpperCase() +
-                                        '</td><td>:</td><td>' + debitur[key] + '</td></tr>';
+                                    var value = debitur[key] !== null ? debitur[key] :
+                                    ""; // Replace null with empty string
+                                    html += '<tr><td width="30%">' + key.replace(/_/g, ' ')
+                                        .toUpperCase() + '</td><td>:</td><td>' + value +
+                                        '</td></tr>';
                                 }
                             }
+
                             html += '</table>';
                             $('#memoModal .modal-body').html(html);
 

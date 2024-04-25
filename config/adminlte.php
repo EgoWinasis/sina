@@ -319,6 +319,11 @@ return [
             'url'         => '/',
             'icon'        => 'fas fa-home'
         ],
+        [
+            'text' => 'Droping',
+            'url'  => '/droping',
+            'icon' => 'fas fa-fw fa-wallet',
+        ],
         ['header' => 'account_settings'],
         [
             'text' => 'profile',

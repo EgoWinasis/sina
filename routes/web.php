@@ -48,12 +48,24 @@ Route::group(['middleware' => 'profile.check'], function () {
     Route::resource('ipaddress', \App\Http\Controllers\IpAddressController::class)->middleware('auth');
     // banner
     Route::resource('banner', \App\Http\Controllers\BannerController::class)->middleware('auth');
+    Route::post('/banner/{id}/upload-image', [App\Http\Controllers\AjaxController::class, 'uploadImage']);
+    Route::get('/banner/{id}/cetak-banner', [App\Http\Controllers\AjaxController::class, 'cetakBanner'])->name('cetakBanner');
     // hari besar
     Route::resource('hari-besar', \App\Http\Controllers\HariBesarController::class)->middleware('auth');
+    Route::post('/hari-besar/{id}/upload-image', [App\Http\Controllers\AjaxController::class, 'uploadImageHari']);
+    Route::get('/import-hari', [App\Http\Controllers\AjaxController::class, 'importExcel'])->name('importHari');
+    Route::post('/store-haribesar', [App\Http\Controllers\AjaxController::class, 'storeExcelHari'])->name('storeExcelHari');
+    Route::get('/download-excel-template', function () {
+        return response()->file(public_path('storage/hari_besar/hari.xlsx'));
+    })->name('download.excel.template');
+
+
+    // droping 
+    Route::get('/droping', [App\Http\Controllers\DropingController::class, 'index'])->middleware('auth');
+
     // memo route
     Route::resource('memo', \App\Http\Controllers\MemoController::class)->middleware('auth');
-    // uploud image
-    Route::post('/banner/{id}/upload-image', [App\Http\Controllers\AjaxController::class, 'uploadImage']);
+    // 
 
     Route::get('memo/{id}/cetak', [\App\Http\Controllers\MemoController::class, 'cetak'])->name('memo.cetak');
 });

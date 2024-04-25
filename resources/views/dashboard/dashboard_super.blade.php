@@ -4,6 +4,8 @@
         <li class="breadcrumb-item active">Dashboard</li>
     </ol>
 
+    @if (auth()->user()->role == 'super')
+        
     <div class="row">
         <div class="col-xl-3 col-md-6">
 
@@ -51,6 +53,8 @@
             </div>
         </div>
     </div>
+   
+    @endif
 
     @include('table.droping_ao')
     @include('table.droping_wilayah')

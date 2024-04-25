@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\ModelAoBaru;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
-class HomeController extends Controller
+class DropingController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -220,18 +220,10 @@ class HomeController extends Controller
 
 
 
-            // welcome message 
-
-            if (session()->has('show_welcome_message')) {
-                session()->forget('show_welcome_message');
-            } else {
-                session()->flash('show_welcome_message', true);
-            }
-
-            $userName = auth()->user()->name;
             
-            
-            return view('dashboard')->with(compact('results', 'resultsAobaru', 'droping', 'userName'));
+
+
+            return view('droping.droping_view')->with(compact('results', 'resultsAobaru', 'droping'));
         }
     }
 }

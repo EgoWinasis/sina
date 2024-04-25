@@ -183,3 +183,20 @@ th, td {
 .kredit-debitur table thead tr{
     background-color: rgb(221, 219, 219);
 }
+
+
+.image-container {
+    text-align: center; /* Center the image horizontally */
+}
+
+#banner-image {
+    max-width: 210mm; /* Set the maximum width to the width of an A4 page */
+    max-height: 160mm; /* Set the maximum height to the height of an A4 page */
+    height: auto; /* Maintain the aspect ratio */
+    margin: 10px auto; /* Center the image horizontally */
+}
+
+
+.table-banner{
+    width: 100%;
+}

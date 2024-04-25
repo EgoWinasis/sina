@@ -1,13 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'BPR Nusamba Adiwerna - Banner')
+@section('title', 'BPR Nusamba Adiwerna - Hari Besar')
 
 @section('content')
     <div id="layoutSidenav">
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid">
-                    <h1 class="mt-4">Banner</h1>
+                    <h1 class="mt-4">Hari Besar</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item">Desain</li>
                         <li class="breadcrumb-item active">Banner</li>
@@ -25,6 +25,11 @@
                                     <div class="col-md-12 d-flex justify-content-end">
                                         <x-adminlte-button onclick="return add();" label="Tambah" theme="primary"
                                             icon="fas fa-plus" />
+
+                                        {{-- import --}}
+                                        <x-adminlte-button onclick="importHari()" label="Import" title="Import for batch"
+                                            theme="success" class="ml-4" icon='fas fa-file-excel'>
+                                        </x-adminlte-button>
                                     </div>
                                 </div>
                                 <div class="card-body table-responsive">
@@ -32,12 +37,10 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Tanggal Permintaan</th>
-                                                <th>Kantor</th>
-                                                <th>Toko</th>
-                                                <th>Alamat</th>
-                                                <th>Deadline</th>
+                                                <th>Hari</th>
+                                                <th>Tanggal</th>
                                                 <th>Status</th>
+                                                <th>Desain</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -45,18 +48,16 @@
                                             @php
                                                 $i = 1;
                                             @endphp
-                                            @foreach ($banners as $banner)
+                                            @foreach ($hariBesar as $hari)
                                                 <tr>
                                                     <td>{{ $i++ }}</td>
-                                                    <td>{{ $banner->created_at }}</td>
-                                                    <td class="name">{{ $banner->kantor }}</td>
-                                                    <td>{{ $banner->toko }}</td>
-                                                    <td>{{ $banner->alamat }}</td>
-                                                    <td>{{ $banner->deadline }}</td>
+                                                    <td>{{ $hari->hari }}</td>
+                                                    <td>{{ $hari->tanggal }}
+                                                    </td>
                                                     <td>
                                                         @php
                                                             $statusClass = '';
-                                                            switch ($banner->status) {
+                                                            switch ($hari->status) {
                                                                 case 'PENDING':
                                                                     $statusClass = 'badge-warning';
                                                                     break;
@@ -71,28 +72,36 @@
                                                                     break;
                                                             }
                                                         @endphp
-                                                        <span class="badge {{ $statusClass }}">{{ $banner->status }}</span>
+                                                        <span class="badge {{ $statusClass }}">{{ $hari->status }}</span>
                                                     </td>
+                                                    <td>
+                                                        @if ($hari->desain !== '-')
+                                                            <a href="{{ asset('storage/hari_besar/' . $hari->desain) }}"
+                                                                target="_blank" title="Lihat" style="cursor: zoom-in;">
+                                                                <img src="{{ asset('storage/hari_besar/' . $hari->desain) }}"
+                                                                    style="max-height: 100px;">
+                                                            </a>
+                                                        @else
+                                                            No image
+                                                        @endif
+                                                    </td>
+
+
 
                                                     <td>
                                                         <a class="btn btn-info m-2" data-toggle="modal"
-                                                            data-target="#bannerModal" data-banner-id="{{ $banner->id }}">
+                                                            data-target="#bannerModal" data-banner-id="{{ $hari->id }}">
                                                             Show</a>
                                                         <a class="btn btn-primary m-2"
-                                                            href="{{ route('banner.edit', $banner->id) }}">Edit</a>
+                                                            href="{{ route('hari-besar.edit', $hari->id) }}">Edit</a>
                                                         @if (Auth::user()->role == 'super')
                                                             <a class="btn btn-warning m-2 btn-status"
-                                                                data-banner-id="{{ $banner->id }}">Status</a>
+                                                                data-banner-id="{{ $hari->id }}">Status</a>
                                                             <a class="btn btn-secondary m-2 btn-desain"
-                                                                data-banner-id="{{ $banner->id }}">Desain</a>
+                                                                data-banner-id="{{ $hari->id }}">Desain</a>
                                                         @endif
                                                         <a class="btn btn-danger m-2 btn-delete"
-                                                            data-id="{{ $banner->id }}">Delete</a>
-
-                                                        @if ($banner->desain !== '-')
-                                                            <a class="btn btn-success m-2"
-                                                                href="{{ route('cetakBanner', ['id' => $banner->id]) }}">Cetak</a>
-                                                        @endif
+                                                            data-id="{{ $hari->id }}">Delete</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -111,7 +120,7 @@
                     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="slikModalLabel">Permintaan Banner Details</h5>
+                                <h5 class="modal-title" id="slikModalLabel">Hari Besar Details</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -146,8 +155,14 @@
 
     <script>
         function add() {
-            window.location = "{{ route('banner.create') }}";
+            window.location = "{{ route('hari-besar.create') }}";
         }
+
+        function importHari() {
+            window.location = "{{ route('importHari') }}";
+        }
+
+
         $(document).ready(function() {
             var table = $('#table-device').DataTable({
                 dom: 'Bfrtip',
@@ -175,6 +190,8 @@
         // delete button
 
         $(document).on('click', '.btn-delete', function(e) {
+
+
             e.preventDefault();
             var id = $(this).data('id');
             var token = $("meta[name='csrf-token']").attr("content");
@@ -191,7 +208,7 @@
                 if (result.value) {
                     $.ajax({
                         type: "DELETE",
-                        url: "/banner/" + id,
+                        url: "/hari-besar/" + id,
                         data: {
                             'id': id,
                             '_token': token,
@@ -230,7 +247,7 @@
                 // Make an AJAX request to get memo details
                 $.ajax({
                     type: 'GET',
-                    url: '/banner/' + bannerId,
+                    url: '/hari-besar/' + bannerId,
                     dataType: 'json',
                     contentType: 'application/json; charset=utf-8',
                     success: function(response) {
@@ -243,18 +260,14 @@
                             for (var key in banner) {
                                 if (key !== 'id') {
                                     var value = banner[key];
-                                    if (key === 'panjang' || key === 'lebar') {
-                                        value +=
-                                            ' cm'; // Append 'cm' after panjang and lebar values
-                                    }
 
                                     html += '<tr><td width="25%">' + key.replace(/_/g, ' ')
                                         .toUpperCase() +
                                         '</td><td>:</td>';
-                                    if (key === 'image' || key === 'desain') {
+                                    if (key === 'desain') {
                                         if (value !== '-') {
                                             // Prepend the src attribute with the path to your assets
-                                            value = 'storage/banner/' + value;
+                                            value = 'storage/hari_besar/' + value;
                                             html += '<td><a href="' + value +
                                                 '" target="_blank" title="Lihat" style="cursor: zoom-in;"><img src="' +
                                                 value + '" width="100"></a></td>';
@@ -286,7 +299,10 @@
         });
 
         // Attach click event to the button
+
         $(document).on('click', '.btn-status', function(e) {
+
+
             e.preventDefault();
             // Get the banner id from the data attribute
             const bannerId = this.getAttribute('data-banner-id');
@@ -312,7 +328,7 @@
                     // Send AJAX request
                     const selectedStatus = result.value;
                     // Replace '/update-status' with your actual endpoint
-                    fetch(`/banner/${bannerId}`, {
+                    fetch(`/hari-besar/${bannerId}`, {
                         method: 'PUT',
                         body: JSON.stringify({
                             status: selectedStatus
@@ -345,6 +361,8 @@
 
 
         $(document).on('click', '.btn-desain', function(e) {
+
+
             e.preventDefault();
             // Get the banner id from the data attribute
             const bannerId = this.getAttribute('data-banner-id');
@@ -369,7 +387,7 @@
                     const formData = new FormData();
                     formData.append('id', bannerId);
                     formData.append('imageDesain', file.value);
-                    fetch(`/banner/${bannerId}/upload-image`, {
+                    fetch(`/hari-besar/${bannerId}/upload-image`, {
                         method: 'POST',
                         body: formData,
                         headers: {
